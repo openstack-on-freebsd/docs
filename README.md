@@ -1,6 +1,8 @@
-# Notes for OpenStack on FreeBSD Project
+Notes for OpenStack on FreeBSD Project
+======================================
 
-## Environment
+Environment
+-----------
 
 - FreeBSD 13.1-RELEASE
 - OpenStack Xena
@@ -9,7 +11,8 @@
     - `osf-ironic`
     - `osf-nova`
 
-## Keystone
+Keystone
+--------
 
 ### Prerequisites
 
@@ -448,7 +451,9 @@ sudo uwsgi httpd/keystone-uwsgi-admin.ini
 sudo uwsgi httpd/keystone-uwsgi-public.ini
 ```
 
-## Ironic
+Ironic
+------
+
 
 ### Prerequisites
 
@@ -574,7 +579,8 @@ $ baremetal node list
 <empty>
 ```
 
-## References
+References
+----------
 
 ### Previous Works
 
