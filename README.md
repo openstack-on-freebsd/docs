@@ -2,9 +2,12 @@
 
 ## Environment
 
-- FreeBSD 13.0-RELEASE
+- FreeBSD 13.1-RELEASE
 - OpenStack Xena
-- Hostname: `controller`
+- Hostname
+    - `osf-keystone`
+    - `osf-ironic`
+    - `osf-nova`
 
 ## Keystone
 
