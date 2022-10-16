@@ -11,6 +11,16 @@ Environment
     - `osf-ironic`
     - `osf-nova`
 
+Components
+----------
+
+[keystone](keystone.md)
+[ironic](ironic.md)
+[glance](glance.md)
+placement
+neutron
+nova
+
 References
 ----------
 
