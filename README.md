@@ -14,12 +14,12 @@ Environment
 Components
 ----------
 
-[keystone](keystone.md)
-[ironic](ironic.md)
-[glance](glance.md)
-placement
-neutron
-nova
+- [keystone](keystone.md)
+- [ironic](ironic.md)
+- [glance](glance.md)
+- placement
+- neutron
+- nova
 
 References
 ----------
