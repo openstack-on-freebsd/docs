@@ -6,10 +6,14 @@ Environment
 
 - FreeBSD 13.1-RELEASE
 - OpenStack Xena
-- Hostname
-    - `osf-keystone`
-    - `osf-ironic`
-    - `osf-nova`
+- `/etc/hosts`
+    ```
+    192.168.88.243 osf-keystone
+    192.168.88.244 osf-ironic
+    192.168.88.245 osf-nova
+    192.168.88.246 osf-glance
+    192.168.88.249 osf-neutron
+    ```
 
 Components
 ----------
