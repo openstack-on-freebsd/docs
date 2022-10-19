@@ -146,7 +146,9 @@ sudo mysqladmin -u root password 'password'
 
 ```sql
 CREATE DATABASE glance;
+CREATE USER 'glance'@'localhost' IDENTIFIED BY 'password';
 GRANT ALL PRIVILEGES ON glance.* TO 'glance'@'localhost';
+CREATE USER 'glance'@'%' IDENTIFIED BY 'password';
 GRANT ALL PRIVILEGES ON glance.* TO 'glance'@'%';
 FLUSH PRIVILEGES;
 quit
