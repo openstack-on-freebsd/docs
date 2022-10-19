@@ -21,7 +21,7 @@ Components
 - [keystone](keystone.md)
 - [ironic](ironic.md)
 - [glance](glance.md)
-- placement
+- [placement](placement.md)
 - neutron
 - nova
 
