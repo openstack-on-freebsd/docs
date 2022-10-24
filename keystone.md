@@ -19,7 +19,7 @@ git checkout origin/stable/xena -b stable/xena
 Then create virtual environment for testing:
 
 ```bash=
-python3.8 -m venv .venv
+python -m venv .venv
 source .venv/bin/activate
 ```
 
@@ -51,7 +51,7 @@ Config Generation
 > Issue fixed. (2022/02/10)
 
 ```bash=
-sudo pkg install libxml2 libxslt postgresql14-client
+sudo pkg install libxml2 libxslt openldap26-client postgresql14-client
 pip install lxml psycopg2
 ```
 
@@ -446,4 +446,13 @@ Start two Kestone uWSGI applications, one for admin, the other for public:
 ```bash=
 sudo uwsgi httpd/keystone-uwsgi-admin.ini
 sudo uwsgi httpd/keystone-uwsgi-public.ini
+```
+
+Caching
+-------
+
+```bash
+sudo pkg install memcached
+sudo sysrc memcached_enable=yes
+sudo service memcached start
 ```
