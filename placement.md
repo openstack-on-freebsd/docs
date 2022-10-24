@@ -126,19 +126,73 @@ openstack endpoint create --region RegionOne placement admin http://osf-nova:877
 ```
 
 ```bash
-placement-manage --config-file etc/placement.conf db sync
+pip install pymysql
 ```
 
 ```bash
+placement-manage --config-file etc/placement/placement.conf db sync
 ```
 
 Running
 -------
 
 ```
-pip install uwsgi
+pip install python-memcached uwsgi
 ```
 
 ```bash
 OS_PLACEMENT_CONFIG_DIR=etc/placement uwsgi -M --http 0.0.0.0:8778 --wsgi-file $(which placement-api) --processes 2 --threads 10
+```
+
+Verifying
+---------
+
+```bash
+. admin-openrc
+```
+
+```bash
+pip install osc-placement
+```
+
+```bash
+$ openstack --os-placement-api-version 1.2 resource class list --sort-column name
++----------------------------------------+
+| name                                   |
++----------------------------------------+
+| DISK_GB                                |
+| FPGA                                   |
+| IPV4_ADDRESS                           |
+| MEMORY_MB                              |
+| MEM_ENCRYPTION_CONTEXT                 |
+| NET_BW_EGR_KILOBIT_PER_SEC             |
+| NET_BW_IGR_KILOBIT_PER_SEC             |
+| NET_PACKET_RATE_EGR_KILOPACKET_PER_SEC |
+| NET_PACKET_RATE_IGR_KILOPACKET_PER_SEC |
+| NET_PACKET_RATE_KILOPACKET_PER_SEC     |
+| NUMA_CORE                              |
+| NUMA_MEMORY_MB                         |
+| NUMA_SOCKET                            |
+| NUMA_THREAD                            |
+| PCI_DEVICE                             |
+| PCPU                                   |
+| PGPU                                   |
+| SRIOV_NET_VF                           |
+| VCPU                                   |
+| VGPU                                   |
+| VGPU_DISPLAY_HEAD                      |
++----------------------------------------+
+$ openstack --os-placement-api-version 1.6 trait list --sort-column name
++---------------------------------------+
+| name                                  |
++---------------------------------------+
+| COMPUTE_ACCELERATORS                  |
+| COMPUTE_ARCH_AARCH64                  |
+| COMPUTE_ARCH_MIPSEL                   |
+| COMPUTE_ARCH_PPC64LE                  |
+| COMPUTE_ARCH_RISCV64                  |
+| COMPUTE_ARCH_S390X                    |
+| COMPUTE_ARCH_X86_64                   |
+| COMPUTE_CONFIG_DRIVE_REGENERATION     |
+...
 ```
