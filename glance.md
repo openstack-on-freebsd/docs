@@ -83,7 +83,7 @@ stores = file,http
 
 default_store = file
 
-filesystem_store_datadir = /usr/home/imp/glance/var/lib/glance/images
+filesystem_store_datadir = /usr/home/freebsd/glance/var/lib/glance/images
 
 [healthcheck]
 
