@@ -318,6 +318,23 @@ $ openstack user list
 +----------------------------------+-------+
 ```
 
+### Creating Domains, Projects, Users, and Roles
+
+```bash
+openstack domain create --description "An Example Domain" example
+```
+
+```bash
+openstack project create --domain default --description "Service Project" service
+```
+
+```bash
+openstack project create --domain default --description "Demo Project" myproject
+openstack user create --domain default --password-prompt myuser
+openstack role create myrole
+openstack role add --project myproject --user myuser myrole
+```
+
 ### Feeding Sample Data (Optional)
 
 For a more realistic environment, you can feed some fake data to Keystone:
