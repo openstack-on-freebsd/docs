@@ -149,11 +149,11 @@ Verifying
 ---------
 
 ```bash
-. admin-openrc
+pip install osc-placement
 ```
 
 ```bash
-pip install osc-placement
+. admin-openrc
 ```
 
 ```bash
