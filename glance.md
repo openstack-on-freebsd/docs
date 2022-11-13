@@ -151,7 +151,7 @@ GRANT ALL PRIVILEGES ON glance.* TO 'glance'@'localhost';
 CREATE USER 'glance'@'%' IDENTIFIED BY 'password';
 GRANT ALL PRIVILEGES ON glance.* TO 'glance'@'%';
 FLUSH PRIVILEGES;
-quit
+QUIT
 ```
 
 ```bash

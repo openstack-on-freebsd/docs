@@ -102,6 +102,7 @@ GRANT ALL PRIVILEGES ON placement.* TO 'placement'@'localhost';
 CREATE USER 'placement'@'%' IDENTIFIED BY 'password';
 GRANT ALL PRIVILEGES ON placement.* TO 'placement'@'%';
 FLUSH PRIVILEGES;
+QUIT
 ```
 
 ### Initialization

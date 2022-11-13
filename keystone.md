@@ -113,13 +113,14 @@ sudo mysqladmin -u root password 'password'
 
 Create essential database and users with rightful privileges for Keystone.
 
-```sql=
+```sql
 CREATE DATABASE keystone;
 CREATE USER 'keystone'@'localhost' IDENTIFIED BY 'password';
 GRANT ALL PRIVILEGES ON keystone.* TO 'keystone'@'localhost';
 CREATE USER 'keystone'@'%' IDENTIFIED BY 'password';
 GRANT ALL PRIVILEGES ON keystone.* TO 'keystone'@'%';
 FLUSH PRIVILEGES;
+QUIT
 ```
 
 System User
