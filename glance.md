@@ -187,6 +187,10 @@ Running
 -------
 
 ```bash
+pip install python-memcached
+```
+
+```bash
 glance-api --config-file etc/glance-api.conf
 ```
 
