@@ -51,7 +51,7 @@ Config Generation
 > Issue fixed. (2022/02/10)
 
 ```bash=
-sudo pkg install libxml2 libxslt openldap26-client postgresql14-client
+sudo pkg install libxml2 libxslt openldap24-client postgresql14-client
 pip install lxml psycopg2
 ```
 
