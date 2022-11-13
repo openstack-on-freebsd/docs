@@ -4,13 +4,13 @@ Keystone
 Prerequisites
 -------------
 
-```bash=
+```bash
 sudo pkg install python
 ```
 
 Get the source of Keystone and checkout to branch `stable/xena`.
 
-```bash=
+```bash
 git clone https://github.com/openstack/keystone.git
 cd keystone
 git checkout origin/stable/xena -b stable/xena
@@ -18,20 +18,20 @@ git checkout origin/stable/xena -b stable/xena
 
 Then create virtual environment for testing:
 
-```bash=
+```bash
 python -m venv .venv
 source .venv/bin/activate
 ```
 
 Upgrade `pip` to the latest version:
 
-```bash=
+```bash
 python -m pip install --upgrade pip wheel
 ```
 
 Rust is a build-time dependency, so install it using `pkg`.
 
-```bash=
+```bash
 sudo pkg install rust
 ```
 
@@ -40,7 +40,7 @@ Build and Install Keystone Package
 
 It's time to install the dependencies and Keystone itself:
 
-```bash=
+```bash
 pip install .
 ```
 
@@ -50,12 +50,12 @@ Config Generation
 > ~~NOTE: This section is not working as of now.~~
 > Issue fixed. (2022/02/10)
 
-```bash=
+```bash
 sudo pkg install libxml2 libxslt openldap24-client postgresql14-client
 pip install lxml psycopg2
 ```
 
-```bash=
+```bash
 pip install tox
 tox -egenconfig
 tox -egenpolicy
@@ -80,20 +80,20 @@ Could not install dependency `python-ldap`, error while building:
 
 Specifying library and header directories in `setup.cfg` of `python-ldap` would work:
 
-```bash=
+```bash
 library_dirs = /usr/local/lib
 include_dirs = /usr/local/include
 ```
 
 However, this isn't what we want because we have to download the sources and modify the configuration. Another way to do this is to prepend environment variables while installing `python-ldap` using `pip`:
 
-```bash=
+```bash
 LDFLAGS=-L/usr/local/lib CPPFLAGS=-I/usr/local/include pip install python-ldap
 ```
 
 Next step is to pass these envs to `tox`:
 
-```bash=
+```bash
 LDFLAGS=-L/usr/local/lib CPPFLAGS=-I/usr/local/include tox -egenconfig
 ```
 
@@ -128,7 +128,7 @@ System User
 
 Create a dedicated user `keystone` and group `keystone` for Keystone service.
 
-```bash=
+```bash
 sudo pw user add -n keystone -c 'OpenStack Identity Service' -d /nonexistent -s /usr/sbin/nologin
 ```
 
@@ -139,7 +139,7 @@ Configuration
 
 The sample configuration file is under `etc/` directory of Keystone project as we generated it in the previous section. Modify essential fields:
 
-```plain
+```
 [DEFAULT]
 
 [application_credential]
@@ -244,17 +244,17 @@ provider = fernet
 
 Then populate the Identity service database. But before that you have to install `pymysql` first.
 
-```bash=
+```bash
 pip install pymysql
 ```
 
-```bash=
+```bash
 keystone-manage --config-file etc/keystone.conf db_sync
 ```
 
 Initialize fernet keys:
 
-```bash=
+```bash
 sudo keystone-manage --config-file etc/keystone.conf fernet_setup \
   --keystone-user keystone \
   --keystone-group keystone
@@ -265,7 +265,7 @@ sudo keystone-manage --config-file etc/keystone.conf credential_setup \
 
 Bootstrap the identity service. The string provided with `--bootstrap-password` is administrator's password.
 
-```bash=
+```bash
 sudo keystone-manage --config-file etc/keystone.conf bootstrap \
   --bootstrap-password password \
   --bootstrap-admin-url http://keystone:35357/v3/ \
@@ -279,11 +279,11 @@ Kickstart Service
 
 For production environment, please use Apache web server. But for now we use `uwsgi` for convenience.
 
-```bash=
+```bash
 pip install uwsgi
 ```
 
-```bash=
+```bash
 sudo uwsgi --http 0.0.0.0:5000 --wsgi-file $(which keystone-wsgi-public)
 ```
 
@@ -292,13 +292,13 @@ Verify Installation
 
 Install `python-openstackclient`
 
-```bash=
+```bash
 pip install python-openstackclient
 ```
 
 Provide API endpoint and credentials for OpenStack client tool:
 
-```bash=
+```bash
 export OS_USERNAME=admin
 export OS_PASSWORD=password
 export OS_PROJECT_NAME=admin
@@ -310,7 +310,7 @@ export OS_AUTH_URL=http://keystone:5000/v3
 
 Test if our newly setup Keystone is working or not by listing users on it.
 
-```bash=
+```bash
 $ openstack user list
 +----------------------------------+-------+
 | ID                               | Name  |
@@ -340,13 +340,13 @@ openstack role add --project myproject --user myuser myrole
 
 For a more realistic environment, you can feed some fake data to Keystone:
 
-```bash=
+```bash
 ADMIN_PASSWORD=password SERVICE_PASSWORD=password tools/sample_data.sh
 ```
 
 Now that you can check `user`, `project`, etc.
 
-```bash=
+```bash
 $ openstack user list
 +----------------------------------+---------+
 | ID                               | Name    |
@@ -367,11 +367,11 @@ Testing
 
 Since Sqlite will be used during functional tests, we need to install dependencies first:
 
-```bash=
+```bash
 sudo pkg install py38-sqlite3
 ```
 
-```bash=
+```bash
 $ LDFLAGS=-L/usr/local/lib CPPFLAGS=-I/usr/local/include tox -epy37
 ...
 <redacted>
@@ -399,7 +399,7 @@ _______________________________________________________ summary ________________
   congratulations :)
 ```
 
-```bash=
+```bash
 $ LDFLAGS=-L/usr/local/lib CPPFLAGS=-I/usr/local/include tox -epep8
 ...
 <redacted>
@@ -434,7 +434,7 @@ _______________________________________________________ summary ________________
 Go into Production
 ------------------
 
-```bash=
+```bash
 sudo pkg install apache24
 sudo sysrc apache24_enable=YES
 ```
@@ -448,7 +448,7 @@ LoadModule proxy_uwsgi_module libexec/apache24/mod_proxy_uwsgi.so
 
 Copy the Apache configuration file for Keystone to the location where Apache will read from and start the HTTP server.
 
-```bash=
+```bash
 sudo cp httpd/uwsgi-keystone.conf /usr/local/etc/apache24/Includes/
 sudo service apache24 start
 ```
@@ -461,7 +461,7 @@ wsgi-file = /usr/home/<username>/keystone/.venv/bin/keystone-wsgi-public
 
 Start two Kestone uWSGI applications, one for admin, the other for public:
 
-```bash=
+```bash
 sudo uwsgi httpd/keystone-uwsgi-admin.ini
 sudo uwsgi httpd/keystone-uwsgi-public.ini
 ```
