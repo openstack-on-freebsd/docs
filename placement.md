@@ -121,9 +121,9 @@ pip install python-openstackclient
 openstack user create --domain default --password-prompt placement
 openstack role add --project service --user placement admin
 openstack service create --name placement --description "Placement API" placement
-openstack endpoint create --region RegionOne placement public http://nova:8778
-openstack endpoint create --region RegionOne placement internal http://nova:8778
-openstack endpoint create --region RegionOne placement admin http://nova:8778
+openstack endpoint create --region RegionOne placement public http://placement:8778
+openstack endpoint create --region RegionOne placement internal http://placement:8778
+openstack endpoint create --region RegionOne placement admin http://placement:8778
 ```
 
 ```bash
