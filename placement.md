@@ -32,7 +32,7 @@ pip install .
 
 ```bash
 pip install tox
-sudo pkg install sqlite3 py39-sqlite3 postgresql14-client
+sudo pkg install sqlite3 py38-sqlite3 postgresql14-client
 ```
 
 ```bash
