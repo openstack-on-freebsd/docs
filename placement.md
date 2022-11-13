@@ -60,9 +60,9 @@ auth_strategy = keystone
 
 [keystone_authtoken]
 
-www_authenticate_uri = http://osf-keystone:5000/
-auth_url = http://osf-keystone:5000/
-memcached_servers = osf-keystone:11211
+www_authenticate_uri = http://keystone:5000/
+auth_url = http://keystone:5000/
+memcached_servers = keystone:11211
 auth_type = password
 project_domain_name = Default
 user_domain_name = Default
@@ -114,16 +114,16 @@ pip install python-openstackclient
 ```
 
 ```bash
-. admin-openrc
+. ~/admin-openrc
 ```
 
 ```bash
 openstack user create --domain default --password-prompt placement
 openstack role add --project service --user placement admin
 openstack service create --name placement --description "Placement API" placement
-openstack endpoint create --region RegionOne placement public http://osf-nova:8778
-openstack endpoint create --region RegionOne placement internal http://osf-nova:8778
-openstack endpoint create --region RegionOne placement admin http://osf-nova:8778
+openstack endpoint create --region RegionOne placement public http://nova:8778
+openstack endpoint create --region RegionOne placement internal http://nova:8778
+openstack endpoint create --region RegionOne placement admin http://nova:8778
 ```
 
 ```bash

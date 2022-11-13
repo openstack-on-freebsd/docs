@@ -268,9 +268,9 @@ Bootstrap the identity service. The string provided with `--bootstrap-password` 
 ```bash=
 sudo keystone-manage --config-file etc/keystone.conf bootstrap \
   --bootstrap-password password \
-  --bootstrap-admin-url http://controller:35357/v3/ \
-  --bootstrap-internal-url http://controller:5000/v3/ \
-  --bootstrap-public-url http://controller:5000/v3/ \
+  --bootstrap-admin-url http://keystone:35357/v3/ \
+  --bootstrap-internal-url http://keystone:5000/v3/ \
+  --bootstrap-public-url http://keystone:5000/v3/ \
   --bootstrap-region-id RegionOne
 ```
 
@@ -305,7 +305,7 @@ export OS_PROJECT_NAME=admin
 export OS_USER_DOMAIN_ID=default
 export OS_PROJECT_DOMAIN_ID=default
 export OS_IDENTITY_API_VERSION=3
-export OS_AUTH_URL=http://controller:5000/v3
+export OS_AUTH_URL=http://keystone:5000/v3
 ```
 
 Test if our newly setup Keystone is working or not by listing users on it.

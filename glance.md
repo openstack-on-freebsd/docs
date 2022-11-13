@@ -93,9 +93,9 @@ filesystem_store_datadir = /usr/home/freebsd/glance/var/lib/glance/images
 
 [keystone_authtoken]
 
-www_authenticate_uri = http://osf-keystone:5000
-auth_url = http://osf-keystone:5000
-memcached_servers = osf-keystone:11211
+www_authenticate_uri = http://keystone:5000
+auth_url = http://keystone:5000
+memcached_servers = keystone:11211
 auth_type = password
 project_domain_name = Default
 user_domain_name = Default
@@ -160,12 +160,15 @@ pip install python-openstackclient
 
 ```bash
 . ~/admin-openrc 
+```
+
+```bash
 openstack user create --domain default --password-prompt glance
 openstack role add --project service --user glance admin
 openstack service create --name glance --description "OpenStack Image" image
-openstack endpoint create --region RegionOne image public http://osf-glance:9292
-openstack endpoint create --region RegionOne image internal http://osf-glance:9292
-openstack endpoint create --region RegionOne image admin http://osf-glance:9292
+openstack endpoint create --region RegionOne image public http://glance:9292
+openstack endpoint create --region RegionOne image internal http://glance:9292
+openstack endpoint create --region RegionOne image admin http://glance:9292
 ```
 
 ```bash
