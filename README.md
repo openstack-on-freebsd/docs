@@ -25,6 +25,14 @@ Components
 - neutron
 - [nova](nova.md)
 
+TODOs
+-----
+
+- Use `--config-dir` instead of `--config-file`
+- Move "Patching" section before "Building" section
+- Run services as non-root users
+- Move `var/lib`, `var/log`, `var/lock` directories under root (`/`)
+
 References
 ----------
 
