@@ -54,3 +54,5 @@ References
 - [Installing python-ldap fails with lber.h file not found in ubuntu 17.10 even after installing devel packages](https://stackoverflow.com/questions/56506294/installing-python-ldap-fails-with-lber-h-file-not-found-in-ubuntu-17-10-even-aft)
 - [python pip specify a library directory and an include directory](https://stackoverflow.com/questions/18783390/python-pip-specify-a-library-directory-and-an-include-directory)
 - [tox configuration specification](https://tox.wiki/en/latest/config.html)
+- [python-ldap does not support OpenLDAP 2.5+ yet](https://github.com/python-ldap/python-ldap/issues/445#issuecomment-983513451)
+- [error in suds-jurko setup command: use_2to3 is invalid](https://github.com/andersinno/suds-jurko/issues/6)
