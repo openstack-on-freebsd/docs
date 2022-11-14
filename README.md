@@ -23,7 +23,7 @@ Components
 - [glance](glance.md)
 - [placement](placement.md)
 - neutron
-- nova
+- [nova](nova.md)
 
 References
 ----------
