@@ -302,21 +302,116 @@ Patching
 
 Source code patching specifically for FreeBSD.
 
-`$HOME/nova/.venv/lib/python3.8/site-packages/oslo_messaging/_drivers/impl_rabbit.py`:
-
-```python
-            # HACK(starbops): add FreeBSD support
-            # TCP_USER_TIMEOUT is not defined on Windows, Mac OS X, and FreeBSD
-            if (sys.platform != 'win32' and sys.platform != 'darwin' and
-                   not sys.platform.startswith('freebsd')):
+```
+--- /usr/home/freebsd/nova/.venv/lib/python3.8/site-packages/oslo_messaging/_drivers/impl_rabbit.py.orig        2022-11-13 11:49:53.930821000 +0000
++++ /usr/home/freebsd/nova/.venv/lib/python3.8/site-packages/oslo_messaging/_drivers/impl_rabbit.py     2022-11-14 10:39:36.675110000 +0000
+@@ -1077,8 +1077,10 @@
+                       % (self.connection_id, str(e)))
+         else:
+             sock.settimeout(timeout)
+-            # TCP_USER_TIMEOUT is not defined on Windows and Mac OS X
+-            if sys.platform != 'win32' and sys.platform != 'darwin':
++            # HACK(starbops): add FreeBSD support
++            # TCP_USER_TIMEOUT is not defined on Windows, Mac OS X, and FreeBSD
++            if (sys.platform != 'win32' and sys.platform != 'darwin' and
++                   not sys.platform.startswith('freebsd')):
+                 try:
+                     timeout = timeout * 1000 if timeout is not None else 0
+                     # NOTE(gdavoian): only integers and strings are allowed
 ```
 
-`$HOME/nova/.venv/lib/python3.8/site-packages/nova/virt/libvirt/driver.py`:
+```
+--- /usr/home/freebsd/nova/.venv/lib/python3.8/site-packages/nova/virt/libvirt/host.py.orig     2022-11-13 11:49:55.347054000 +0000
++++ /usr/home/freebsd/nova/.venv/lib/python3.8/site-packages/nova/virt/libvirt/host.py  2022-11-20 06:11:12.993985000 +0000
+@@ -741,7 +741,30 @@
 
-```python
-        # HACK(starbops): Make it works on FreeBSD platforms
-        if (not sys.platform.startswith('linux') and
-            not sys.platform.startswith('freebsd')):
+         :returns: set of online CPUs, raises libvirtError on error
+         """
+-        cpus, cpu_map, online = self.get_connection().getCPUMap()
++        # HACK(starbops): mock up getCPUMap() because it is not implemented on
++        # FreeBSD platform
++        #cpus, cpu_map, online = self.get_connection().getCPUMap()
++        cpus, cpu_map, online = (
++                16,
++                [
++                    True,
++                    True,
++                    True,
++                    True,
++                    True,
++                    True,
++                    True,
++                    True,
++                    True,
++                    True,
++                    True,
++                    True,
++                    True,
++                    True,
++                    True,
++                    True
++                ],
++                16)
+
+         online_cpus = set()
+         for cpu in range(cpus):
+@@ -1165,7 +1188,8 @@
+
+     @staticmethod
+     def _get_avail_memory_kb():
+-        with open('/proc/meminfo') as fp:
++        # HACK(starbops): replace with FreeBSD specific path
++        with open('/compat/linux/proc/meminfo') as fp:
+             m = fp.read().split()
+         idx1 = m.index('MemFree:')
+         idx2 = m.index('Buffers:')
+@@ -1498,10 +1522,12 @@
+
+         # we don't use '/capabilities/host/cpu/topology' since libvirt doesn't
+         # guarantee the accuracy of this information
+-        for cell in self.get_capabilities().host.topology.cells:
+-            if any(len(cpu.siblings) > 1 for cpu in cell.cpus if cpu.siblings):
+-                self._has_hyperthreading = True
+-                break
++        # HACK(starbops): FreeBSD support
++        self._has_hyperthreading = False
++        #for cell in self.get_capabilities().host.topology.cells:
++        #    if any(len(cpu.siblings) > 1 for cpu in cell.cpus if cpu.siblings):
++        #        self._has_hyperthreading = True
++        #        break
+
+         return self._has_hyperthreading
+
+```
+
+```
+--- /usr/home/freebsd/nova/.venv/lib/python3.8/site-packages/nova/virt/libvirt/driver.py.orig   2022-11-13 11:49:55.345720000 +0000
++++ /usr/home/freebsd/nova/.venv/lib/python3.8/site-packages/nova/virt/libvirt/driver.py        2022-11-14 10:43:57.675142000 +0000
+@@ -425,7 +425,9 @@
+         }
+         super(LibvirtDriver, self).__init__(virtapi)
+
+-        if not sys.platform.startswith('linux'):
++        # HACK(starbops): Make it works on FreeBSD platforms
++        if (not sys.platform.startswith('linux') and
++            not sys.platform.startswith('freebsd')):
+             raise exception.InternalError(
+                 _('The libvirt driver only works on Linux'))
+
+```
+
+```
+--- /usr/home/freebsd/nova/.venv/lib/python3.8/site-packages/nova/conf/libvirt.py.orig  2022-11-13 11:49:54.784253000 +0000
++++ /usr/home/freebsd/nova/.venv/lib/python3.8/site-packages/nova/conf/libvirt.py       2022-11-20 07:15:59.609152000 +0000
+@@ -104,7 +104,7 @@
+ """),
+     cfg.StrOpt('virt_type',
+                default='kvm',
+-               choices=('kvm', 'lxc', 'qemu', 'parallels'),
++               choices=('bhyve', 'kvm', 'lxc', 'qemu', 'parallels'),
+                help="""
+ Describes the virtualization type (or so called domain type) libvirt should
+ use.
 ```
 
 Running
