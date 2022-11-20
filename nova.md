@@ -226,6 +226,7 @@ compute_driver = libvirt.LibvirtDriver
 
 [libvirt]
 virt_type = qemu
+connection_uri = bhyve:///system
 ```
 
 ### Setting up Database
