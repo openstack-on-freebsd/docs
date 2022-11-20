@@ -434,6 +434,13 @@ nova-conductor --config-dir etc/nova
 ### Compute
 
 ```bash
+sudo sysrc linux_enable=yes
+sudo service linux start
+```
+
+#### Setting up bhyve
+
+```bash
 sudo kldload vmm
 sudo kldload nmdm
 sudo kldload if_bridge
@@ -453,6 +460,8 @@ sudo sysctl net.link.tap.up_on_open=1
 ```
 net.link.tap.up_on_open=1
 ```
+
+#### libvirt
 
 ```bash
 sudo pkg install pkgconf libvirt
