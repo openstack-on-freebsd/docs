@@ -32,6 +32,7 @@ TODOs
 - Move "Patching" section before "Building" section
 - Run services as non-root users
 - Move `var/lib`, `var/log`, `var/lock` directories under root (`/`)
+- New `virt_type`: `bhyve`
 
 References
 ----------
