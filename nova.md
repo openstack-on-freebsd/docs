@@ -422,6 +422,10 @@ sudo pkg install py38-sqlite3
 ```
 
 ```bash
+pip install python-memcached
+```
+
+```bash
 nova-api --config-dir etc/nova
 nova-scheduler --config-dir etc/nova
 nova-conductor --config-dir etc/nova
