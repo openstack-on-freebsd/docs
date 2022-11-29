@@ -34,6 +34,7 @@ TODOs
 - Move `var/lib`, `var/log`, `var/lock` directories under root (`/`)
 - New `virt_type`: `bhyve`
 - Fixed version, do not rely on branches
+- Add `nova-novncproxy`
 
 References
 ----------
