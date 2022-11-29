@@ -229,6 +229,10 @@ virt_type = qemu
 connection_uri = bhyve:///system
 ```
 
+```bash
+mkdir -p var/lib/nova var/lock/nova var/log/nova
+```
+
 ### Setting up Database
 
 ```bash
