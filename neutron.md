@@ -198,6 +198,10 @@ pip install pymysql
 neutron-db-manage --config-file etc/neutron.conf --config-file etc/neutron/plugins/ml2/ml2_conf.ini upgrade head
 ```
 
+### Configuring Networking Options
+
+We use the simplest possible architecture that only supports attaching instances to provider networks. No self-service networks, routers, or floating IP addresses. Only the admin or other privileged user can manage provider networks.
+
 Patching
 --------
 
@@ -224,18 +228,11 @@ Source code patching specifically for FreeBSD.
 Running
 -------
 
+### Controller Node
+
 ```bash
 neutron-server --config-file etc/neutron.conf --config-file etc/neutron/plugins/ml2/ml2_conf.ini
 ```
-
-### Configuring Networking Options
-
-We use the simplest possible architecture that only supports attaching instances to provider networks. No self-service networks, routers, or floating IP addresses. Only the admin or other privileged user can manage provider networks.
-
-Running
--------
-
-### Controller Node
 
 ### Compute Nodes
 
