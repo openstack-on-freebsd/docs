@@ -22,7 +22,7 @@ Components
 - [ironic](ironic.md)
 - [glance](glance.md)
 - [placement](placement.md)
-- neutron
+- [neutron](neutron.md)
 - [nova](nova.md)
 
 TODOs
