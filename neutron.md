@@ -43,6 +43,8 @@ tox -egenpolicy
 Configuring
 -----------
 
+### Controller Node
+
 `etc/neutron.conf`:
 
 ```
@@ -150,7 +152,7 @@ network_vlan_ranges = provider
 mkdir -p var/lib/neutron
 ```
 
-### Setting up Database
+#### Setting up Database
 
 ```bash
 sudo pkg install mysql80-server
@@ -169,7 +171,7 @@ FLUSH PRIVILEGES;
 QUIT
 ```
 
-### Initialization
+#### Initialization
 
 Configure user and endpoints.
 
@@ -198,9 +200,133 @@ pip install pymysql
 neutron-db-manage --config-file etc/neutron.conf --config-file etc/neutron/plugins/ml2/ml2_conf.ini upgrade head
 ```
 
-### Configuring Networking Options
+### Compute Nodes
 
 We use the simplest possible architecture that only supports attaching instances to provider networks. No self-service networks, routers, or floating IP addresses. Only the admin or other privileged user can manage provider networks.
+
+#### Open vSwitch
+
+Install and configure Open vSwitch on compute nodes.
+
+```bash
+sudo pkg install openvswitch
+```
+
+```bash
+sudo sysrc ovsdb_server_enable=yes
+sudo sysrc ovs_vswitchd_enable=yes
+sudo service ovsdb-server start
+sudo service ovs-vswitchd start
+```
+
+#### Configuring
+
+`etc/neutron.conf`:
+
+```
+[DEFAULT]
+core_plugin = ml2
+auth_strategy = keystone
+
+[agent]
+
+[cache]
+
+[cors]
+
+[database]
+
+[healthcheck]
+
+[ironic]
+
+[keystone_authtoken]
+
+[nova]
+
+[oslo_concurrency]
+
+[oslo_messaging_amqp]
+
+[oslo_messaging_kafka]
+
+[oslo_messaging_notifications]
+
+[oslo_messaging_rabbit]
+
+[oslo_middleware]
+
+[oslo_policy]
+
+[oslo_reports]
+
+[placement]
+
+[privsep]
+
+[quotas]
+
+[ssl]
+
+```
+
+`etc/neutron/plugins/ml2/openvswitch_agent.ini`:
+
+```
+[DEFAULT]
+
+[agent]
+minimize_polling = false
+
+[network_log]
+
+[ovs]
+bridge_mappings = provider:br-provider
+datapath_type = netdev
+
+[securitygroup]
+firewall_driver = openvswitch
+
+```
+
+`etc/dhcp_agent.ini`:
+
+```
+[DEFAULT]
+interface_driver = openvswitch
+enable_isolated_metadata = True
+force_metadata = True
+
+[agent]
+
+[ovs]
+
+```
+
+`etc/metadata_agent.ini`:
+
+```
+[DEFAULT]
+nova_metadata_host = nova
+metadata_proxy_shared_secret = s3cret
+
+[agent]
+
+[cache]
+
+```
+
+Create provider bridge `br-provider`.
+
+```bash
+sudo ovs-vsctl add-br br-provider -- set bridge br-provider datapath_type=netdev
+```
+
+Add the provider network interface into the provider bridge.
+
+```bash
+sudo ovs-vsctl add-port br-provider vtnet1
+```
 
 Patching
 --------
@@ -244,26 +370,6 @@ neutron-openvswitch-agent --config-file etc/neutron.conf --config-file etc/neutr
 neutron-dhcp-agent --config-file etc/neutron.conf --config-file etc/dhcp_agent.ini
 ```
 
-Open vSwitch
-------------
-
-Install and configure Open vSwitch on compute nodes.
-
-### Installation
-
 ```bash
-sudo pkg install openvswitch
-```
-
-```bash
-sudo sysrc ovsdb_server_enable=yes
-sudo sysrc ovs_vswitchd_enable=yes
-sudo service ovsdb-server start
-sudo service ovs-vswitchd start
-```
-
-### Pre-configuration
-
-```bash
-sudo ovs-vsctl add-br br-provider -- set bridge br-provider datapath_type=netdev
+neutron-metadata-agent --config-file etc/neutron.conf --config-file etc/metadata_agent.ini
 ```
