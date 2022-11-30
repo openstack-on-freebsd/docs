@@ -351,6 +351,94 @@ Source code patching specifically for FreeBSD.
                      # NOTE(gdavoian): only integers and strings are allowed
 ```
 
+### Compute Nodes
+
+```
+--- /usr/home/freebsd/neutron/.venv/lib/python3.8/site-packages/oslo_privsep/daemon.py.orig     2022-11-30 11:42:37.739778000 +0000
++++ /usr/home/freebsd/neutron/.venv/lib/python3.8/site-packages/oslo_privsep/daemon.py  2022-11-30 11:48:20.825033000 +0000
+@@ -67,7 +67,8 @@
+ from oslo_privsep import capabilities
+ from oslo_privsep import comm
+
+-if platform.system() == 'Linux':
++# HACK(starbops): add FreeBSD support
++if platform.system() == 'Linux' or platform.system() == 'FreeBSD':
+     import fcntl
+     import grp
+     import pwd
+@@ -405,7 +406,8 @@
+     def _drop_privs(self):
+         try:
+             # Keep current capabilities across setuid away from root.
+-            capabilities.set_keepcaps(True)
++            # HACK(starbops): bypass Linux capabilities on FreeBSD
++            #capabilities.set_keepcaps(True)
+
+             if self.group is not None:
+                 try:
+@@ -422,12 +424,15 @@
+                 setgid(self.group)
+
+         finally:
+-            capabilities.set_keepcaps(False)
++            # HACK(starbops): bypass Linux capabilities on FreeBSD
++            #capabilities.set_keepcaps(False)
++            pass
+
+         LOG.info('privsep process running with uid/gid: %(uid)s/%(gid)s',
+                  {'uid': os.getuid(), 'gid': os.getgid()})
+
+-        capabilities.drop_all_caps_except(self.caps, self.caps, [])
++        # HACK(starbops): bypass Linux capabilities on FreeBSD
++        #capabilities.drop_all_caps_except(self.caps, self.caps, [])
+
+         def fmt_caps(capset):
+             if not capset:
+@@ -437,15 +442,16 @@
+             fc.sort()
+             return '|'.join(fc)
+
+-        eff, prm, inh = capabilities.get_caps()
+-        LOG.info(
+-            'privsep process running with capabilities '
+-            '(eff/prm/inh): %(eff)s/%(prm)s/%(inh)s',
+-            {
+-                'eff': fmt_caps(eff),
+-                'prm': fmt_caps(prm),
+-                'inh': fmt_caps(inh),
+-            })
++        # HACK(starbops): bypass Linux capabilities on FreeBSD
++        #eff, prm, inh = capabilities.get_caps()
++        #LOG.info(
++        #    'privsep process running with capabilities '
++        #    '(eff/prm/inh): %(eff)s/%(prm)s/%(inh)s',
++        #    {
++        #        'eff': fmt_caps(eff),
++        #        'prm': fmt_caps(prm),
++        #        'inh': fmt_caps(inh),
++        #    })
+
+     def _process_cmd(self, msgid, cmd, *args):
+         """Executes the requested command in an execution thread.
+```
+
+```
+--- /usr/home/freebsd/neutron/.venv/lib/python3.8/site-packages/oslo_messaging/_drivers/impl_rabbit.py.orig     2022-11-29 15:38:25.869655000 +0000
++++ /usr/home/freebsd/neutron/.venv/lib/python3.8/site-packages/oslo_messaging/_drivers/impl_rabbit.py  2022-11-30 14:35:23.291480000 +0000
+@@ -1077,8 +1077,10 @@
+                       % (self.connection_id, str(e)))
+         else:
+             sock.settimeout(timeout)
++            # HACK(starbops): add FreeBSD support
+             # TCP_USER_TIMEOUT is not defined on Windows and Mac OS X
+-            if sys.platform != 'win32' and sys.platform != 'darwin':
++            if (sys.platform != 'win32' and sys.platform != 'darwin' and
++                    not sys.platform.startswith('freebsd')):
+                 try:
+                     timeout = timeout * 1000 if timeout is not None else 0
+                     # NOTE(gdavoian): only integers and strings are allowed
+```
+
 Running
 -------
 
