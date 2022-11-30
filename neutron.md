@@ -228,6 +228,7 @@ sudo service ovs-vswitchd start
 core_plugin = ml2
 auth_strategy = keystone
 transport_url = rabbit://openstack:password@rabbitmq
+state_path = /usr/home/freebsd/neutron/var/lib/neutron
 
 [agent]
 
@@ -269,6 +270,10 @@ transport_url = rabbit://openstack:password@rabbitmq
 
 [ssl]
 
+```
+
+```bash
+mkdir -p var/lib/neutron
 ```
 
 `etc/neutron/plugins/ml2/openvswitch_agent.ini`:
