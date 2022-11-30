@@ -227,6 +227,7 @@ sudo service ovs-vswitchd start
 [DEFAULT]
 core_plugin = ml2
 auth_strategy = keystone
+transport_url = rabbit://openstack:password@rabbitmq
 
 [agent]
 
