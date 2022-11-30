@@ -447,6 +447,10 @@ Running
 ### Controller Node
 
 ```bash
+pip install python-memcached
+```
+
+```bash
 neutron-server --config-file etc/neutron.conf --config-file etc/neutron/plugins/ml2/ml2_conf.ini
 ```
 
