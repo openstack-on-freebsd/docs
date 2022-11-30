@@ -473,3 +473,21 @@ neutron-dhcp-agent --config-file etc/neutron.conf --config-file etc/dhcp_agent.i
 ```bash
 neutron-metadata-agent --config-file etc/neutron.conf --config-file etc/metadata_agent.ini
 ```
+
+Verifying
+---------
+
+```bash
+. ~/admin-openrc
+```
+
+```bash
+$ openstack network agent list
++--------------------------------------+--------------------+------+-------------------+-------+-------+---------------------------+
+| ID                                   | Agent Type         | Host | Availability Zone | Alive | State | Binary                    |
++--------------------------------------+--------------------+------+-------------------+-------+-------+---------------------------+
+| 5d6dd635-b4c1-4399-80fa-8ed67428e1fb | Open vSwitch agent | nova | None              | :-)   | UP    | neutron-openvswitch-agent |
+| aa69830f-7525-4070-999c-c23d0c70f29d | Metadata agent     | nova | None              | :-)   | UP    | neutron-metadata-agent    |
+| c77190d3-e527-4fcd-be2a-616c8d412ccc | DHCP agent         | nova | nova              | :-)   | UP    | neutron-dhcp-agent        |
++--------------------------------------+--------------------+------+-------------------+-------+-------+---------------------------+
+```
