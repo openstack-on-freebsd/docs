@@ -333,9 +333,11 @@ Patching
 
 Source code patching specifically for FreeBSD.
 
+### Controller Node
+
 ```
---- .venv/lib/python3.8/site-packages/oslo_messaging/_drivers/impl_rabbit.py.orig       2022-11-28 15:23:02.796536000 +0000
-+++ .venv/lib/python3.8/site-packages/oslo_messaging/_drivers/impl_rabbit.py    2022-11-29 15:24:28.902891000 +0000
+--- /usr/home/freebsd/neutron/.venv/lib/python3.8/site-packages/oslo_messaging/_drivers/impl_rabbit.py.orig     2022-11-28 15:23:02.796536000 +0000
++++ /usr/home/freebsd/neutron/.venv/lib/python3.8/site-packages/oslo_messaging/_drivers/impl_rabbit.py  2022-11-29 15:24:28.902891000 +0000
 @@ -1077,8 +1077,10 @@
                        % (self.connection_id, str(e)))
          else:
