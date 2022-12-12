@@ -359,6 +359,23 @@ Source code patching specifically for FreeBSD.
                      # NOTE(gdavoian): only integers and strings are allowed
 ```
 
+```
+--- /usr/home/freebsd/neutron/.venv/lib/python3.8/site-packages/neutron/common/utils.py.orig    2022-11-28 15:23:03.866294000 +0000
++++ /usr/home/freebsd/neutron/.venv/lib/python3.8/site-packages/neutron/common/utils.py 2022-12-12 14:17:51.219483000 +0000
+@@ -693,9 +693,10 @@
+         context = (args[0] if issubclass(type(args[0]),
+                                          n_context.ContextBaseWithSession) else
+                    args[1])
++        # HACK(starbops): disable guard
+         # FIXME(kevinbenton): get rid of all uses of this flag
+         if (context.session.is_active and
+-                getattr(context, 'GUARD_TRANSACTION', True)):
++                getattr(context, 'GUARD_TRANSACTION', False)):
+             raise RuntimeError(_("Method %s cannot be called within a "
+                                  "transaction.") % f)
+         return f(*args, **kwargs)
+```
+
 ### Compute Nodes
 
 ```
@@ -453,7 +470,7 @@ Running
 ### Controller Node
 
 ```bash
-pip install python-memcached
+pip install python-memcached python-binary-memcached
 ```
 
 ```bash
@@ -490,4 +507,85 @@ $ openstack network agent list
 | aa69830f-7525-4070-999c-c23d0c70f29d | Metadata agent     | nova | None              | :-)   | UP    | neutron-metadata-agent    |
 | c77190d3-e527-4fcd-be2a-616c8d412ccc | DHCP agent         | nova | nova              | :-)   | UP    | neutron-dhcp-agent        |
 +--------------------------------------+--------------------+------+-------------------+-------+-------+---------------------------+
+```
+
+### Creating Network
+
+```bash
+$ openstack network create \
+  --share \
+  --provider-physical-network provider \
+  --provider-network-type flat \
+  provider1
++---------------------------+--------------------------------------+
+| Field                     | Value                                |
++---------------------------+--------------------------------------+
+| admin_state_up            | UP                                   |
+| availability_zone_hints   |                                      |
+| availability_zones        |                                      |
+| created_at                | 2022-12-12T14:18:13Z                 |
+| description               |                                      |
+| dns_domain                | None                                 |
+| id                        | e077a70a-2726-4694-bdc7-2a92b7adb419 |
+| ipv4_address_scope        | None                                 |
+| ipv6_address_scope        | None                                 |
+| is_default                | None                                 |
+| is_vlan_transparent       | None                                 |
+| mtu                       | 1500                                 |
+| name                      | provider1                            |
+| port_security_enabled     | True                                 |
+| project_id                | b21373c63a2548ff83fac9b01e86cda2     |
+| provider:network_type     | flat                                 |
+| provider:physical_network | provider                             |
+| provider:segmentation_id  | None                                 |
+| qos_policy_id             | None                                 |
+| revision_number           | 1                                    |
+| router:external           | Internal                             |
+| segments                  | None                                 |
+| shared                    | True                                 |
+| status                    | ACTIVE                               |
+| subnets                   |                                      |
+| tags                      |                                      |
+| tenant_id                 | b21373c63a2548ff83fac9b01e86cda2     |
+| updated_at                | 2022-12-12T14:18:13Z                 |
++---------------------------+--------------------------------------+
+```
+
+### Creating Subnet
+
+```bash
+$ openstack subnet create \
+  --subnet-range 192.168.48.0/24 \
+  --gateway 192.168.48.1 \
+  --network provider1 \
+  --allocation-pool start=192.168.48.201,end=192.168.48.210 \
+  --no-dhcp \
+  --dns-nameserver 1.1.1.1 \
+  provider1-v4
++----------------------+--------------------------------------+
+| Field                | Value                                |
++----------------------+--------------------------------------+
+| allocation_pools     | 192.168.48.201-192.168.48.210        |
+| cidr                 | 192.168.48.0/24                      |
+| created_at           | 2022-12-12T15:17:02Z                 |
+| description          |                                      |
+| dns_nameservers      | 1.1.1.1                              |
+| dns_publish_fixed_ip | None                                 |
+| enable_dhcp          | False                                |
+| gateway_ip           | 192.168.48.1                         |
+| host_routes          |                                      |
+| id                   | 9f5e4252-685a-4b19-aaa7-9da2636718d2 |
+| ip_version           | 4                                    |
+| ipv6_address_mode    | None                                 |
+| ipv6_ra_mode         | None                                 |
+| name                 | provider1-v4                         |
+| network_id           | e077a70a-2726-4694-bdc7-2a92b7adb419 |
+| project_id           | b21373c63a2548ff83fac9b01e86cda2     |
+| revision_number      | 0                                    |
+| segment_id           | None                                 |
+| service_types        |                                      |
+| subnetpool_id        | None                                 |
+| tags                 |                                      |
+| updated_at           | 2022-12-12T15:17:02Z                 |
++----------------------+--------------------------------------+
 ```
