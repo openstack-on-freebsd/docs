@@ -28,6 +28,12 @@ sudo pkg install libxml2 libxslt rust
 pip install .
 ```
 
+By default, `pip` will install the depending packages fulfilling the requirements. We need to specify the exact version of `neutron-lib`; otherwise, it will install the newest version, which causes RBAC-related issues.
+
+```bash
+pip install neutron-lib==2.15.0
+```
+
 ### Generating Default Configuration Files
 
 ```bash
