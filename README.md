@@ -59,3 +59,4 @@ References
 - [tox configuration specification](https://tox.wiki/en/latest/config.html)
 - [python-ldap does not support OpenLDAP 2.5+ yet](https://github.com/python-ldap/python-ldap/issues/445#issuecomment-983513451)
 - [error in suds-jurko setup command: use_2to3 is invalid](https://github.com/andersinno/suds-jurko/issues/6)
+- [libvirt and bhyve](https://people.freebsd.org/~rodrigc/libvirt/libvirt-bhyve.html)
