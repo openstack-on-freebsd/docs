@@ -474,6 +474,21 @@ sudo service libvirtd start
 pip install libvirt-python
 ```
 
+#### Register Cell
+
+Run the following command with the admin credential on the control node:
+
+```bash
+$ . ~/admin-openrc
+$ nova-manage --config-file etc/nova/nova.conf cell_v2 discover_hosts --verbose
+Found 2 cell mappings.
+Skipping cell0 since it does not contain hosts.
+Getting computes from cell 'cell1': 345fe55a-1331-4d39-9b24-cf56f55c1528
+Checking host mapping for compute host 'nova': bdf0e6b6-b775-4831-8667-f9bfc6b3f425
+Creating host mapping for compute host 'nova': bdf0e6b6-b775-4831-8667-f9bfc6b3f425
+Found 1 unmapped computes in cell: 345fe55a-1331-4d39-9b24-cf56f55c1528
+```
+
 ```bash
 sudo nova-compute --config-dir etc/nova
 ```
