@@ -426,7 +426,7 @@ sudo pkg install py38-sqlite3
 ```
 
 ```bash
-pip install python-memcached
+pip install python-memcached python-binary-memcached
 ```
 
 ```bash
