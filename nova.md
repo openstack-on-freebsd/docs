@@ -307,6 +307,75 @@ Patching
 Source code patching specifically for FreeBSD.
 
 ```
+--- /usr/home/freebsd/nova/.venv/lib/python3.8/site-packages/oslo_privsep/daemon.py.orig        2022-11-13 11:49:53.372599000 +0000
++++ /usr/home/freebsd/nova/.venv/lib/python3.8/site-packages/oslo_privsep/daemon.py     2022-12-27 14:33:29.629325000 +0000
+@@ -67,7 +67,8 @@
+ from oslo_privsep import capabilities
+ from oslo_privsep import comm
+
+-if platform.system() == 'Linux':
++# HACK(starbops): add FreeBSD support
++if platform.system() == 'Linux' or platform.system() == 'FreeBSD':
+     import fcntl
+     import grp
+     import pwd
+@@ -405,7 +406,8 @@
+     def _drop_privs(self):
+         try:
+             # Keep current capabilities across setuid away from root.
+-            capabilities.set_keepcaps(True)
++            # HACK(starbops): bypass Linux capabilities on FreeBSD
++            #capabilities.set_keepcaps(True)
+
+             if self.group is not None:
+                 try:
+@@ -422,12 +424,15 @@
+                 setgid(self.group)
+
+         finally:
+-            capabilities.set_keepcaps(False)
++            # HACK(starbops): bypass Linux capabilities on FreeBSD
++            #capabilities.set_keepcaps(False)
++            pass
+
+         LOG.info('privsep process running with uid/gid: %(uid)s/%(gid)s',
+                  {'uid': os.getuid(), 'gid': os.getgid()})
+
+-        capabilities.drop_all_caps_except(self.caps, self.caps, [])
++        # HACK(starbops): bypass Linux capabilities on FreeBSD
++        #capabilities.drop_all_caps_except(self.caps, self.caps, [])
+
+         def fmt_caps(capset):
+             if not capset:
+@@ -437,15 +442,16 @@
+             fc.sort()
+             return '|'.join(fc)
+
+-        eff, prm, inh = capabilities.get_caps()
+-        LOG.info(
+-            'privsep process running with capabilities '
+-            '(eff/prm/inh): %(eff)s/%(prm)s/%(inh)s',
+-            {
+-                'eff': fmt_caps(eff),
+-                'prm': fmt_caps(prm),
+-                'inh': fmt_caps(inh),
+-            })
++        # HACK(starbops): bypass Linux capabilities on FreeBSD
++        #eff, prm, inh = capabilities.get_caps()
++        #LOG.info(
++        #    'privsep process running with capabilities '
++        #    '(eff/prm/inh): %(eff)s/%(prm)s/%(inh)s',
++        #    {
++        #        'eff': fmt_caps(eff),
++        #        'prm': fmt_caps(prm),
++        #        'inh': fmt_caps(inh),
++        #    })
+
+     def _process_cmd(self, msgid, cmd, *args):
+         """Executes the requested command in an execution thread.
+```
+
+```
 --- /usr/home/freebsd/nova/.venv/lib/python3.8/site-packages/oslo_messaging/_drivers/impl_rabbit.py.orig        2022-11-13 11:49:53.930821000 +0000
 +++ /usr/home/freebsd/nova/.venv/lib/python3.8/site-packages/oslo_messaging/_drivers/impl_rabbit.py     2022-11-14 10:39:36.675110000 +0000
 @@ -1077,8 +1077,10 @@
@@ -416,6 +485,21 @@ Source code patching specifically for FreeBSD.
                 help="""
  Describes the virtualization type (or so called domain type) libvirt should
  use.
+```
+
+```
+--- /usr/home/freebsd/nova/.venv/lib/python3.8/site-packages/oslo_rootwrap/cmd.py.orig  2022-11-13 11:49:39.900492000 +0000
++++ /usr/home/freebsd/nova/.venv/lib/python3.8/site-packages/oslo_rootwrap/cmd.py       2022-12-27 15:31:20.180714000 +0000
+@@ -99,7 +99,8 @@
+         if (fd_limits[0] > sensible_fd_limit):
+             # Close any fd beyond sensible_fd_limit prior adjusting our
+             # rlimit to ensure all fds are closed
+-            for fd_entry in os.listdir('/proc/self/fd'):
++            # HACK(starbops): FreeBSD support
++            for fd_entry in os.listdir('/compat/linux/proc/self/fd'):
+                 # NOTE(dmllr): In a previous patch revision non-numeric
+                 # dir entries were silently ignored which reviewers
+                 # didn't like. Readd exception handling when it occurs.
 ```
 
 Running

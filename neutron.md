@@ -382,6 +382,23 @@ Source code patching specifically for FreeBSD.
          return f(*args, **kwargs)
 ```
 
+```
+--- /usr/home/freebsd/neutron/.venv/lib/python3.8/site-packages/neutron/db/provisioning_blocks.py.orig  2022-11-28 15:23:03.905282000 +0000
++++ /usr/home/freebsd/neutron/.venv/lib/python3.8/site-packages/neutron/db/provisioning_blocks.py       2023-01-04 11:31:31.173935000 +0000
+@@ -123,8 +123,9 @@
+     log_dict = {'oid': object_id, 'entity': entity, 'otype': object_type}
+     # this can't be called in a transaction to avoid REPEATABLE READ
+     # tricking us into thinking there are remaining provisioning components
+-    if context.session.is_active:
+-        raise RuntimeError(_("Must not be called in a transaction"))
++    # HACK(starbops): disable check
++    #if context.session.is_active:
++    #    raise RuntimeError(_("Must not be called in a transaction"))
+     standard_attr_id = _get_standard_attr_id(context, object_id,
+                                              object_type)
+     if not standard_attr_id:
+```
+
 ### Compute Nodes
 
 ```
