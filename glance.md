@@ -11,8 +11,8 @@ git checkout tags/23.0.0 -b v23.0.0
 ```
 
 ```bash
-sudo pkg install python
-python -m venv .venv
+sudo pkg install python38
+python3.8 -m venv .venv
 source .venv/bin/activate
 ```
 

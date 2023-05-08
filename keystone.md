@@ -5,7 +5,7 @@ Prerequisites
 -------------
 
 ```bash
-sudo pkg install python
+sudo pkg install python38
 ```
 
 Get the source of Keystone and checkout to branch `stable/xena`.
@@ -19,7 +19,7 @@ git checkout origin/stable/xena -b stable/xena
 Then create virtual environment for testing:
 
 ```bash
-python -m venv .venv
+python3.8 -m venv .venv
 source .venv/bin/activate
 ```
 
@@ -95,6 +95,7 @@ Next step is to pass these envs to `tox`:
 
 ```bash
 LDFLAGS=-L/usr/local/lib CPPFLAGS=-I/usr/local/include tox -egenconfig
+LDFLAGS=-L/usr/local/lib CPPFLAGS=-I/usr/local/include tox -egenpolicy
 ```
 
 Phew, problem solved!
