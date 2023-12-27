@@ -1,43 +1,51 @@
-Notes for OpenStack on FreeBSD Project
-======================================
+# Documentation for The "OpenStack on FreeBSD" Project
 
-Environment
------------
+The documentation provides in-depth guides for users to successfully deploy and operate OpenStack on FreeBSD. Covering installation, configuration, and troubleshooting, the documentation ensures a set of essential OpenStack components is up and running with basic functionality.
 
-- FreeBSD 13.1-RELEASE
-- OpenStack Xena
-- `/etc/hosts`
-    ```
-    192.168.88.243 osf-keystone
-    192.168.88.244 osf-ironic
-    192.168.88.245 osf-nova
-    192.168.88.246 osf-glance
-    192.168.88.249 osf-neutron
-    ```
+## Environment
 
-Components
-----------
+- FreeBSD 14.0-STABLE
+- Based on OpenStack Xena, specifically on the `stable/xena` branch of each projects
+- Single-node all-in-one deployment
 
-- [keystone](keystone.md)
-- [ironic](ironic.md)
-- [glance](glance.md)
-- [placement](placement.md)
-- [neutron](neutron.md)
-- [nova](nova.md)
+## Components
 
-TODOs
------
+Components that are ported to FreeBSD and can be run with a limited feature set by applying patches and workarounds:
 
-- Use `--config-dir` instead of `--config-file`
-- Move "Patching" section before "Building" section
-- Run services as non-root users
-- Move `var/lib`, `var/log`, `var/lock` directories under root (`/`)
-- New `virt_type`: `bhyve`
+- [Keystone](keystone/README.md)
+- [Glance](glance/README.md)
+- [Placement](placement/README.md)
+- [Neutron](neutron/README.md)
+- [Nova](nova/README.md)
+
+WIP:
+
+- [Ironic](README.md)
+
+## Future Works
+
+### Neutron
+
+- Implement the mechanism driver that utilizes FreeBSD native bridges
+- Replace Linux namespaces and virtual ethernet with FreeBSD's `vnet` and `epair`
+- Integrate `dnsmasq`
+
+### Nova
+
+- Implement a new `virt_type`: `bhyve`, for the `libvirt` compute driver
+- Get rid of custom implementation - `socat-manager`
+
+### Oslo
+
+- Modify oslo.privsep to support FreeBSD's privilege model
+
+### Misc
+
 - Fixed version, do not rely on branches
-- Add `nova-novncproxy`
+- Use `--config-dir` instead of `--config-file`
+- Move `var/lib`, `var/log`, `var/lock` directories under root (`/`)
 
-References
-----------
+## References
 
 ### Previous Works
 
