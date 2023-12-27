@@ -11,8 +11,8 @@ git checkout origin/stable/xena -b stable/xena
 ```
 
 ```bash
-sudo pkg install python38
-python -m venv .venv
+sudo pkg install python39
+python3.9 -m venv .venv
 source .venv/bin/activate
 ```
 
@@ -63,6 +63,7 @@ transport_url = rabbit://openstack:password@rabbitmq:5672/
 log_dir = /usr/home/freebsd/nova/var/log/nova
 lock_path = /usr/home/freebsd/nova/var/lock/nova
 state_path = /usr/home/freebsd/nova/var/lib/nova
+web = /usr/local/libexec/novnc
 
 [api]
 auth_strategy = keystone
@@ -83,6 +84,7 @@ connection = mysql+pymysql://nova:password@localhost/nova_api
 [conductor]
 
 [console]
+enabled = true
 
 [consoleauth]
 
@@ -191,6 +193,7 @@ password = password
 [scheduler]
 
 [serial_console]
+enabled = true
 
 [service_user]
 
@@ -205,7 +208,8 @@ password = password
 [vmware]
 
 [vnc]
-enabled = true
+#enabled = true
+enabled = false
 server_listen = $my_ip
 server_proxyclient_address = $my_ip
 novncproxy_base_url = http://nova:6080/vnc_auto.html
@@ -223,10 +227,22 @@ novncproxy_base_url = http://nova:6080/vnc_auto.html
 ```
 [DEFAULT]
 compute_driver = libvirt.LibvirtDriver
+rootwrap_config = etc/nova/rootwrap.conf
 
 [libvirt]
-virt_type = qemu
+virt_type = bhyve
 connection_uri = bhyve:///system
+images_type = raw
+```
+
+Add additional directories into `filters_path` and `exec_dirs` in `etc/nova/rootwrap.conf`:
+
+```
+[DEFAULT]
+filters_path=/usr/home/freebsd/nova/etc/nova/rootwrap.d,/etc/nova/rootwrap.d,/usr/share/nova/rootwrap
+
+exec_dirs=/usr/home/freebsd/nova/.venv/bin,/sbin,/usr/sbin,/bin,/usr/bin,/usr/local/sbin,/usr/local/bin
+...
 ```
 
 ```bash
@@ -284,6 +300,7 @@ pip install pymysql
 ```
 
 ```bash
+export EVENTLET_HUB=poll # Especially for Python 3.9. Ref: https://github.com/eventlet/eventlet/issues/670#issuecomment-735488189
 nova-manage --config-file etc/nova/nova.conf api_db sync
 nova-manage --config-file etc/nova/nova.conf cell_v2 map_cell0
 nova-manage --config-file etc/nova/nova.conf cell_v2 create_cell --name=cell1 --verbose
@@ -307,8 +324,8 @@ Patching
 Source code patching specifically for FreeBSD.
 
 ```
---- /usr/home/freebsd/nova/.venv/lib/python3.8/site-packages/oslo_privsep/daemon.py.orig        2022-11-13 11:49:53.372599000 +0000
-+++ /usr/home/freebsd/nova/.venv/lib/python3.8/site-packages/oslo_privsep/daemon.py     2022-12-27 14:33:29.629325000 +0000
+--- /usr/home/freebsd/nova/.venv/lib/python3.9/site-packages/oslo_privsep/daemon.py.orig        2022-11-13 11:49:53.372599000 +0000
++++ /usr/home/freebsd/nova/.venv/lib/python3.9/site-packages/oslo_privsep/daemon.py     2022-12-27 14:33:29.629325000 +0000
 @@ -67,7 +67,8 @@
  from oslo_privsep import capabilities
  from oslo_privsep import comm
@@ -376,8 +393,8 @@ Source code patching specifically for FreeBSD.
 ```
 
 ```
---- /usr/home/freebsd/nova/.venv/lib/python3.8/site-packages/oslo_messaging/_drivers/impl_rabbit.py.orig        2022-11-13 11:49:53.930821000 +0000
-+++ /usr/home/freebsd/nova/.venv/lib/python3.8/site-packages/oslo_messaging/_drivers/impl_rabbit.py     2022-11-14 10:39:36.675110000 +0000
+--- /usr/home/freebsd/nova/.venv/lib/python3.9/site-packages/oslo_messaging/_drivers/impl_rabbit.py.orig        2022-11-13 11:49:53.930821000 +0000
++++ /usr/home/freebsd/nova/.venv/lib/python3.9/site-packages/oslo_messaging/_drivers/impl_rabbit.py     2022-11-14 10:39:36.675110000 +0000
 @@ -1077,8 +1077,10 @@
                        % (self.connection_id, str(e)))
          else:
@@ -394,8 +411,8 @@ Source code patching specifically for FreeBSD.
 ```
 
 ```
---- /usr/home/freebsd/nova/.venv/lib/python3.8/site-packages/nova/virt/libvirt/host.py.orig     2022-11-13 11:49:55.347054000 +0000
-+++ /usr/home/freebsd/nova/.venv/lib/python3.8/site-packages/nova/virt/libvirt/host.py  2022-11-20 06:11:12.993985000 +0000
+--- /usr/home/freebsd/nova/.venv/lib/python3.9/site-packages/nova/virt/libvirt/host.py.orig     2022-11-13 11:49:55.347054000 +0000
++++ /usr/home/freebsd/nova/.venv/lib/python3.9/site-packages/nova/virt/libvirt/host.py  2022-11-20 06:11:12.993985000 +0000
 @@ -741,7 +741,30 @@
 
          :returns: set of online CPUs, raises libvirtError on error
@@ -458,8 +475,8 @@ Source code patching specifically for FreeBSD.
 ```
 
 ```
---- /usr/home/freebsd/nova/.venv/lib/python3.8/site-packages/nova/virt/libvirt/driver.py.orig   2022-11-13 11:49:55.345720000 +0000
-+++ /usr/home/freebsd/nova/.venv/lib/python3.8/site-packages/nova/virt/libvirt/driver.py        2022-11-14 10:43:57.675142000 +0000
+--- /usr/home/freebsd/nova/.venv/lib/python3.9/site-packages/nova/virt/libvirt/driver.py.orig   2022-11-13 11:49:55.345720000 +0000
++++ /usr/home/freebsd/nova/.venv/lib/python3.9/site-packages/nova/virt/libvirt/driver.py        2022-11-14 10:43:57.675142000 +0000
 @@ -425,7 +425,9 @@
          }
          super(LibvirtDriver, self).__init__(virtapi)
@@ -474,8 +491,8 @@ Source code patching specifically for FreeBSD.
 ```
 
 ```
---- /usr/home/freebsd/nova/.venv/lib/python3.8/site-packages/nova/conf/libvirt.py.orig  2022-11-13 11:49:54.784253000 +0000
-+++ /usr/home/freebsd/nova/.venv/lib/python3.8/site-packages/nova/conf/libvirt.py       2022-11-20 07:15:59.609152000 +0000
+--- /usr/home/freebsd/nova/.venv/lib/python3.9/site-packages/nova/conf/libvirt.py.orig  2022-11-13 11:49:54.784253000 +0000
++++ /usr/home/freebsd/nova/.venv/lib/python3.9/site-packages/nova/conf/libvirt.py       2022-11-20 07:15:59.609152000 +0000
 @@ -104,7 +104,7 @@
  """),
      cfg.StrOpt('virt_type',
@@ -488,8 +505,8 @@ Source code patching specifically for FreeBSD.
 ```
 
 ```
---- /usr/home/freebsd/nova/.venv/lib/python3.8/site-packages/oslo_rootwrap/cmd.py.orig  2022-11-13 11:49:39.900492000 +0000
-+++ /usr/home/freebsd/nova/.venv/lib/python3.8/site-packages/oslo_rootwrap/cmd.py       2022-12-27 15:31:20.180714000 +0000
+--- /usr/home/freebsd/nova/.venv/lib/python3.9/site-packages/oslo_rootwrap/cmd.py.orig  2022-11-13 11:49:39.900492000 +0000
++++ /usr/home/freebsd/nova/.venv/lib/python3.9/site-packages/oslo_rootwrap/cmd.py       2022-12-27 15:31:20.180714000 +0000
 @@ -99,7 +99,8 @@
          if (fd_limits[0] > sensible_fd_limit):
              # Close any fd beyond sensible_fd_limit prior adjusting our
@@ -506,7 +523,7 @@ Running
 -------
 
 ```bash
-sudo pkg install py38-sqlite3
+sudo pkg install py39-sqlite3
 ```
 
 ```bash
@@ -561,7 +578,11 @@ pip install libvirt-python
 #### nova-compute
 
 ```bash
-sudo nova-compute --config-dir etc/nova
+mkdir -p var/lib/nova/instances
+```
+
+```bash
+sudo EVENTLET_HUB=poll nova-compute --config-dir etc/nova
 ```
 
 #### Register Cell
@@ -577,6 +598,65 @@ Getting computes from cell 'cell1': 345fe55a-1331-4d39-9b24-cf56f55c1528
 Checking host mapping for compute host 'nova': bdf0e6b6-b775-4831-8667-f9bfc6b3f425
 Creating host mapping for compute host 'nova': bdf0e6b6-b775-4831-8667-f9bfc6b3f425
 Found 1 unmapped computes in cell: 345fe55a-1331-4d39-9b24-cf56f55c1528
+```
+
+It's likely you're hitting the max connection limit of MySQL here. Try the following to check if that happens and temporarily increase the cap (the default value is `100`):
+
+```bash
+> show variables like "max_connections";
++-----------------+-------+
+| Variable_name   | Value |
++-----------------+-------+
+| max_connections | 151   |
++-----------------+-------+
+> set global max_connections = 500;
+```
+
+To persist the change, add the line under `[mysqld]` section in the file `/usr/local/etc/mysql/my.cnf`:
+
+```
+[mysqld]
+max_connections = 500
+```
+
+### nova-novncproxy & nova-serialproxy
+
+```bash
+sudo pkg install novnc websockify
+```
+
+```bash
+nova-novncproxy --config-dir etc/nova
+```
+
+```bash
+EVENTLET_HUB=poll nova-serialproxy --config-dir etc/nova
+```
+
+Deploy socat-manager
+--------------------
+
+Install the dependency:
+
+```bash
+sudo pkg install socat
+```
+
+Run the server (on each compute node):
+
+```bash
+git clone https://github.com/openstack-on-freebsd/socat-manager.git
+cd socat-manager/
+python server.py
+```
+
+Install the bhyve hook script (on each compute node):
+
+```bash
+sudo mkdir /usr/local/etc/libvirt/hooks
+sudo cp hooks/bhyve /usr/local/etc/libvirt/hooks/
+sudo chmod 755 /usr/local/etc/libvirt/hooks/bhyve
+sudo service libvirtd restart
 ```
 
 Verifying

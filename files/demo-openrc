@@ -1,0 +1,7 @@
+export OS_USERNAME=myuser
+export OS_PASSWORD=password
+export OS_PROJECT_NAME=myproject
+export OS_USER_DOMAIN_ID=default
+export OS_PROJECT_DOMAIN_ID=default
+export OS_IDENTITY_API_VERSION=3
+export OS_AUTH_URL=http://keystone:5000/v3

@@ -7,12 +7,13 @@ Building
 ```bash
 git clone https://github.com/openstack/placement.git
 cd placement/
-git checkout tags/6.0.0 -b v6.0.0
+#git checkout tags/6.0.0 -b v6.0.0
+git checkout origin/stable/xena -b stable/xena
 ```
 
 ```bash
-sudo pkg install python
-python -m venv .venv
+sudo pkg install python39
+python3.9 -m venv .venv
 source .venv/bin/activate
 ```
 
@@ -32,7 +33,7 @@ pip install .
 
 ```bash
 pip install tox
-sudo pkg install sqlite3 py38-sqlite3 postgresql14-client
+sudo pkg install sqlite3 py39-sqlite3 postgresql14-client
 ```
 
 ```bash

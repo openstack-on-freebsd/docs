@@ -5,7 +5,7 @@ Prerequisites
 -------------
 
 ```bash
-sudo pkg install python38
+sudo pkg install python39
 ```
 
 Get the source of Keystone and checkout to branch `stable/xena`.
@@ -19,7 +19,7 @@ git checkout origin/stable/xena -b stable/xena
 Then create virtual environment for testing:
 
 ```bash
-python3.8 -m venv .venv
+python3.9 -m venv .venv
 source .venv/bin/activate
 ```
 
@@ -369,7 +369,7 @@ Testing
 Since Sqlite will be used during functional tests, we need to install dependencies first:
 
 ```bash
-sudo pkg install py38-sqlite3
+sudo pkg install py39-sqlite3
 ```
 
 ```bash

@@ -11,8 +11,8 @@ git checkout origin/stable/xena -b stable/xena
 ```
 
 ```bash
-sudo pkg install python
-python -m venv .venv
+sudo pkg install python39
+python3.9 -m venv .venv
 source .venv/bin/activate
 ```
 
@@ -38,7 +38,7 @@ pip install neutron-lib==2.15.0
 
 ```bash
 pip install tox
-sudo pkg install sqlite3 py38-sqlite3
+sudo pkg install sqlite3 py39-sqlite3
 ```
 
 ```bash
@@ -348,8 +348,8 @@ Source code patching specifically for FreeBSD.
 ### Controller Node
 
 ```
---- /usr/home/freebsd/neutron/.venv/lib/python3.8/site-packages/oslo_messaging/_drivers/impl_rabbit.py.orig     2022-11-28 15:23:02.796536000 +0000
-+++ /usr/home/freebsd/neutron/.venv/lib/python3.8/site-packages/oslo_messaging/_drivers/impl_rabbit.py  2022-11-29 15:24:28.902891000 +0000
+--- /usr/home/freebsd/neutron/.venv/lib/python3.9/site-packages/oslo_messaging/_drivers/impl_rabbit.py.orig     2022-11-28 15:23:02.796536000 +0000
++++ /usr/home/freebsd/neutron/.venv/lib/python3.9/site-packages/oslo_messaging/_drivers/impl_rabbit.py  2022-11-29 15:24:28.902891000 +0000
 @@ -1077,8 +1077,10 @@
                        % (self.connection_id, str(e)))
          else:
@@ -366,8 +366,8 @@ Source code patching specifically for FreeBSD.
 ```
 
 ```
---- /usr/home/freebsd/neutron/.venv/lib/python3.8/site-packages/neutron/common/utils.py.orig    2022-11-28 15:23:03.866294000 +0000
-+++ /usr/home/freebsd/neutron/.venv/lib/python3.8/site-packages/neutron/common/utils.py 2022-12-12 14:17:51.219483000 +0000
+--- /usr/home/freebsd/neutron/.venv/lib/python3.9/site-packages/neutron/common/utils.py.orig    2022-11-28 15:23:03.866294000 +0000
++++ /usr/home/freebsd/neutron/.venv/lib/python3.9/site-packages/neutron/common/utils.py 2022-12-12 14:17:51.219483000 +0000
 @@ -693,9 +693,10 @@
          context = (args[0] if issubclass(type(args[0]),
                                           n_context.ContextBaseWithSession) else
@@ -383,8 +383,8 @@ Source code patching specifically for FreeBSD.
 ```
 
 ```
---- /usr/home/freebsd/neutron/.venv/lib/python3.8/site-packages/neutron/db/provisioning_blocks.py.orig  2022-11-28 15:23:03.905282000 +0000
-+++ /usr/home/freebsd/neutron/.venv/lib/python3.8/site-packages/neutron/db/provisioning_blocks.py       2023-01-04 11:31:31.173935000 +0000
+--- /usr/home/freebsd/neutron/.venv/lib/python3.9/site-packages/neutron/db/provisioning_blocks.py.orig  2022-11-28 15:23:03.905282000 +0000
++++ /usr/home/freebsd/neutron/.venv/lib/python3.9/site-packages/neutron/db/provisioning_blocks.py       2023-01-04 11:31:31.173935000 +0000
 @@ -123,8 +123,9 @@
      log_dict = {'oid': object_id, 'entity': entity, 'otype': object_type}
      # this can't be called in a transaction to avoid REPEATABLE READ
@@ -402,8 +402,8 @@ Source code patching specifically for FreeBSD.
 ### Compute Nodes
 
 ```
---- /usr/home/freebsd/neutron/.venv/lib/python3.8/site-packages/oslo_privsep/daemon.py.orig     2022-11-30 11:42:37.739778000 +0000
-+++ /usr/home/freebsd/neutron/.venv/lib/python3.8/site-packages/oslo_privsep/daemon.py  2022-11-30 11:48:20.825033000 +0000
+--- /usr/home/freebsd/neutron/.venv/lib/python3.9/site-packages/oslo_privsep/daemon.py.orig     2022-11-30 11:42:37.739778000 +0000
++++ /usr/home/freebsd/neutron/.venv/lib/python3.9/site-packages/oslo_privsep/daemon.py  2022-11-30 11:48:20.825033000 +0000
 @@ -67,7 +67,8 @@
  from oslo_privsep import capabilities
  from oslo_privsep import comm
@@ -471,8 +471,8 @@ Source code patching specifically for FreeBSD.
 ```
 
 ```
---- /usr/home/freebsd/neutron/.venv/lib/python3.8/site-packages/oslo_messaging/_drivers/impl_rabbit.py.orig     2022-11-29 15:38:25.869655000 +0000
-+++ /usr/home/freebsd/neutron/.venv/lib/python3.8/site-packages/oslo_messaging/_drivers/impl_rabbit.py  2022-11-30 14:35:23.291480000 +0000
+--- /usr/home/freebsd/neutron/.venv/lib/python3.9/site-packages/oslo_messaging/_drivers/impl_rabbit.py.orig     2022-11-29 15:38:25.869655000 +0000
++++ /usr/home/freebsd/neutron/.venv/lib/python3.9/site-packages/oslo_messaging/_drivers/impl_rabbit.py  2022-11-30 14:35:23.291480000 +0000
 @@ -1077,8 +1077,10 @@
                        % (self.connection_id, str(e)))
          else:

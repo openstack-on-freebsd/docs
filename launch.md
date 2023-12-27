@@ -137,7 +137,7 @@ $ openstack security group list
 ```bash
 $ wget https://ftp.tw.freebsd.org/pub/FreeBSD/releases/VM-IMAGES/13.2-RELEASE/amd64/Latest/FreeBSD-13.2-RELEASE-amd64.raw.xz
 $ xz -d FreeBSD-13.2-RELEASE-amd64.raw.xz
-$ . ~/admin-openrc.sh
+$ . ~/admin-openrc
 $ glance image-create --name "freebsd-13.2" --file ~/FreeBSD-13.2-RELEASE-amd64.raw --disk-format raw --container-format bare --visibility=public
 +------------------+----------------------------------------------------------------------------------+
 | Property         | Value                                                                            |
@@ -168,16 +168,6 @@ $ glance image-create --name "freebsd-13.2" --file ~/FreeBSD-13.2-RELEASE-amd64.
 ```bash
 openstack flavor create --id 2 --vcpus 1 --ram 2048 --disk 20 m1.small
 sudo pkg install qemu-tools
-```
-
-`etc/nova/nova.conf`:
-
-```
-[DEFAULT]
-rootwrap_config = etc/nova/rootwrap.conf
-
-[libvirt]
-virt_type = bhyve
 ```
 
 ```bash
@@ -331,4 +321,36 @@ PING 8.8.8.8 (8.8.8.8): 56 data bytes
 --- 8.8.8.8 ping statistics ---
 4 packets transmitted, 4 packets received, 0.0% packet loss
 round-trip min/avg/max/stddev = 2.557/3.233/4.535/0.786 ms
+```
+
+Connect the serial console
+--------------------------
+
+Get the serial console's URL from Nova:
+
+```bash
+$ openstack console url show --serial provider-instance
++----------+-----------------------------------------------------------------+
+| Field    | Value                                                           |
++----------+-----------------------------------------------------------------+
+| protocol | serial                                                          |
+| type     | serial                                                          |
+| url      | ws://127.0.0.1:6083/?token=a1782520-994d-4940-ac07-93f7e0e0c18b |
++----------+-----------------------------------------------------------------+
+```
+
+We'll need the third-party to easily connect to the serial console:
+
+```bash
+git clone http://github.com/openstack-on-freebsd/novaconsole.git
+cd novaconsole/
+python3.9 -m venv .venv
+source .venv/bin/activate
+pip install -r requires.txt .
+```
+
+Connect with the URL we just got from `openstack console url show` command:
+
+```bash
+novaconsole --url ws://127.0.0.1:6083/?token=a1782520-994d-4940-ac07-93f7e0e0c18b
 ```

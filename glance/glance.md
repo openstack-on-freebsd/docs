@@ -7,12 +7,13 @@ Building
 ```bash
 git clone https://github.com/openstack/glance.git
 cd glance/
-git checkout tags/23.0.0 -b v23.0.0
+#git checkout tags/23.0.0 -b v23.0.0
+git checkout origin/stable/xena -b stable/xena
 ```
 
 ```bash
-sudo pkg install python38
-python3.8 -m venv .venv
+sudo pkg install python39
+python3.9 -m venv .venv
 source .venv/bin/activate
 ```
 
@@ -32,7 +33,7 @@ pip install .
 
 ```bash
 pip install tox
-sudo pkg install sqlite3 py38-sqlite3 postgresql14-client
+sudo pkg install sqlite3 py39-sqlite3 postgresql14-client
 ```
 
 ```bash
