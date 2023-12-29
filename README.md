@@ -33,6 +33,7 @@ WIP:
 ### Nova
 
 - Implement a new `virt_type`: `bhyve`, for the `libvirt` compute driver
+- libvirt hook script refinement
 - Get rid of custom implementation - `socat-manager`
 
 ### Oslo
