@@ -69,3 +69,9 @@ WIP:
 - [python-ldap does not support OpenLDAP 2.5+ yet](https://github.com/python-ldap/python-ldap/issues/445#issuecomment-983513451)
 - [error in suds-jurko setup command: use_2to3 is invalid](https://github.com/andersinno/suds-jurko/issues/6)
 - [libvirt and bhyve](https://people.freebsd.org/~rodrigc/libvirt/libvirt-bhyve.html)
+
+## Contribution
+
+If you encounter any issue by following the guide, please file an issue in the [admin repository](https://github.com/openstack-on-freebsd/admin). We track all project issues under the OpenStack-on-FreeBSD organization in that repository for better manageability.
+
+As always, contributions are welcome! Please feel free to submit PRs in their corresponding repositories.
