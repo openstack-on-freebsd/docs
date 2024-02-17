@@ -531,9 +531,9 @@ pip install python-memcached python-binary-memcached
 ```
 
 ```bash
-nova-api --config-dir etc/nova
-nova-scheduler --config-dir etc/nova
-nova-conductor --config-dir etc/nova
+EVENTLET_HUB=poll nova-api --config-dir etc/nova
+EVENTLET_HUB=poll nova-scheduler --config-dir etc/nova
+EVENTLET_HUB=poll nova-conductor --config-dir etc/nova
 ```
 
 ### Compute
@@ -647,7 +647,7 @@ Run the server (on each compute node):
 ```bash
 git clone https://github.com/openstack-on-freebsd/socat-manager.git
 cd socat-manager/
-python server.py
+sudo python3.9 server.py
 ```
 
 Install the bhyve hook script (on each compute node):
