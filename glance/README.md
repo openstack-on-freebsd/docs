@@ -7,8 +7,7 @@ Building
 ```bash
 git clone https://github.com/openstack/glance.git
 cd glance/
-#git checkout tags/23.0.0 -b v23.0.0
-git checkout origin/stable/xena -b stable/xena
+git checkout origin/unmaintained/xena -b unmaintained/xena
 ```
 
 ```bash
@@ -26,7 +25,7 @@ sudo pkg install rust
 ```
 
 ```bash
-pip install .
+pip install . -r https://raw.githubusercontent.com/openstack-on-freebsd/docs/main/glance/glance-requirements.txt
 ```
 
 ### Generating Default Configuration Files
@@ -49,7 +48,7 @@ cp etc/glance-api.conf etc/glance-api.conf.orig
 cp etc/glance-api.conf.sample etc/glance-api.conf 
 ```
 
-vim etc/glance-api.conf
+`etc/glance-api.conf`:
 
 ```
 [DEFAULT]

@@ -135,7 +135,7 @@ $ openstack security group list
 ```
 
 ```bash
-$ wget https://ftp.tw.freebsd.org/pub/FreeBSD/releases/VM-IMAGES/13.2-RELEASE/amd64/Latest/FreeBSD-13.2-RELEASE-amd64.raw.xz
+$ curl -fLO https://download.freebsd.org/releases/VM-IMAGES/13.2-RELEASE/amd64/Latest/FreeBSD-13.2-RELEASE-amd64.raw.xz
 $ xz -d FreeBSD-13.2-RELEASE-amd64.raw.xz
 $ . ~/admin-openrc
 $ glance image-create --name "freebsd-13.2" --file ~/FreeBSD-13.2-RELEASE-amd64.raw --disk-format raw --container-format bare --visibility=public

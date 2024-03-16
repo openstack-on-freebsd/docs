@@ -5,9 +5,8 @@ Building
 --------
 
 ```bash
-git clone https://github.com/openstack/nova.git
+git clone https://github.com/openstack-on-freebsd/nova.git
 cd nova/
-git checkout origin/stable/xena -b stable/xena
 ```
 
 ```bash
@@ -25,7 +24,7 @@ sudo pkg install libxml2 libxslt rust
 ```
 
 ```bash
-pip install .
+pip install . -r https://raw.githubusercontent.com/openstack-on-freebsd/docs/main/nova/nova-requirements.txt
 ```
 
 ### Generating Default Configuration Files
@@ -591,7 +590,7 @@ Run the following command with the admin credential on the control node:
 
 ```bash
 $ . ~/admin-openrc
-$ nova-manage --config-file etc/nova/nova.conf cell_v2 discover_hosts --verbose
+$ EVENTLET_HUB=poll nova-manage --config-file etc/nova/nova.conf cell_v2 discover_hosts --verbose
 Found 2 cell mappings.
 Skipping cell0 since it does not contain hosts.
 Getting computes from cell 'cell1': 345fe55a-1331-4d39-9b24-cf56f55c1528

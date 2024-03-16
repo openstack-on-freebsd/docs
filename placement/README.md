@@ -7,8 +7,7 @@ Building
 ```bash
 git clone https://github.com/openstack/placement.git
 cd placement/
-#git checkout tags/6.0.0 -b v6.0.0
-git checkout origin/stable/xena -b stable/xena
+git checkout origin/unmaintained/xena -b unmaintained/xena
 ```
 
 ```bash
@@ -26,7 +25,7 @@ sudo pkg install rust
 ```
 
 ```bash
-pip install .
+pip install . -r https://raw.githubusercontent.com/openstack-on-freebsd/docs/main/placement/placement-requirements.txt
 ```
 
 ### Generating Default Configuration Files

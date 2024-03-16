@@ -41,7 +41,7 @@ Build and Install Keystone Package
 It's time to install the dependencies and Keystone itself:
 
 ```bash
-pip install .
+pip install . -r https://raw.githubusercontent.com/openstack-on-freebsd/docs/main/keystone/keystone-requirements.txt
 ```
 
 Config Generation
@@ -51,7 +51,7 @@ Config Generation
 > Issue fixed. (2022/02/10)
 
 ```bash
-sudo pkg install libxml2 libxslt openldap24-client postgresql14-client
+sudo pkg install libxml2 libxslt openldap26-client postgresql14-client
 pip install lxml psycopg2
 ```
 

@@ -5,9 +5,8 @@ Building
 --------
 
 ```bash
-git clone https://github.com/openstack/neutron.git
+git clone https://github.com/openstack-on-freebsd/neutron.git
 cd neutron/
-git checkout origin/stable/xena -b stable/xena
 ```
 
 ```bash
@@ -25,7 +24,7 @@ sudo pkg install libxml2 libxslt rust
 ```
 
 ```bash
-pip install .
+pip install . -r https://raw.githubusercontent.com/openstack-on-freebsd/docs/main/neutron/neutron-requirements.txt
 ```
 
 By default, `pip` will install the depending packages fulfilling the requirements. We need to specify the exact version of `neutron-lib`; otherwise, it will install the newest version, which causes RBAC-related issues.
