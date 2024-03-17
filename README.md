@@ -2,6 +2,8 @@
 
 The documentation provides in-depth guides for users to successfully deploy and operate OpenStack on FreeBSD. Covering installation, configuration, and troubleshooting, the documentation ensures a set of essential OpenStack components is up and running with basic functionality.
 
+[![asciicast](https://asciinema.org/a/647308.svg)](https://asciinema.org/a/647308)
+
 ## Environment
 
 - FreeBSD 14.0-STABLE
