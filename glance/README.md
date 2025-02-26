@@ -5,9 +5,8 @@ Building
 --------
 
 ```bash
-git clone https://github.com/openstack/glance.git
+git clone https://github.com/openstack-on-freebsd/glance.git
 cd glance/
-git checkout origin/unmaintained/xena -b unmaintained/xena
 ```
 
 ```bash
