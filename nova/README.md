@@ -20,7 +20,7 @@ python -m pip install --upgrade pip wheel
 ```
 
 ```bash
-sudo pkg install libxml2 libxslt rust 
+sudo pkg install libxml2 libxslt rust gcc
 ```
 
 ```bash
